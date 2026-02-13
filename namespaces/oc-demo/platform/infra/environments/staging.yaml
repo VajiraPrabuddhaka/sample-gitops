@@ -8,7 +8,7 @@ metadata:
   labels:
     openchoreo.dev/name: staging
 spec:
-  dataPlaneRef: default
-  gateway:
-    dnsPrefix: staging
+  dataPlaneRef:
+    kind: DataPlane
+    name: default
   isProduction: false
