@@ -23,11 +23,6 @@ spec:
       docker:
         context: "/project-doclet-app/service-go-collab"
         filePath: "/project-doclet-app/service-go-collab/Dockerfile"
-      gitops:
-        repositoryUrl: "https://github.com/openchoreo/sample-gitops"
-        branch: "main"
-        targetEnvironment: "development"
-        deploymentPipeline: "standard"
       workloadDescriptorPath: "workload.yaml"
 
   parameters:

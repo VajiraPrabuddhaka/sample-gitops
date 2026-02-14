@@ -16,8 +16,6 @@ spec:
       - name: dockerfile-path
       - name: gitops-repo-url
       - name: gitops-branch
-      - name: gitops-target-environment
-      - name: gitops-deployment-pipeline
       - name: workload-descriptor-path
       - name: registry-url
       - name: image-name
@@ -337,12 +335,9 @@ spec:
             COMPONENT_NAME={{workflow.parameters.component-name}}
             GIT_REVISION={{inputs.parameters.git-revision}}
             CONTAINER_IMAGE={{inputs.parameters.container-image}}
-            TARGET_ENV={{workflow.parameters.gitops-target-environment}}
             NAMESPACE_NAME={{workflow.parameters.namespace-name}}
-            USE_PIPELINE={{workflow.parameters.gitops-deployment-pipeline}}
             WORKLOAD_DESCRIPTOR_CONTENT={{inputs.parameters.descriptor-content}}
             RELEASE_NAME="${COMPONENT_NAME}-${GIT_REVISION}"
-            BINDING_NAME="${TARGET_ENV}-${COMPONENT_NAME}"
 
             echo "===== Initializing OCC Context ====="
             # Initialize occ context (only once)
@@ -358,7 +353,6 @@ spec:
             echo "Component: $COMPONENT_NAME"
             echo "Project: $PROJECT_NAME"
             echo "Image: $CONTAINER_IMAGE"
-            echo "Target environment: $TARGET_ENV"
 
             # Check if workload descriptor is provided
             if [ -n "$WORKLOAD_DESCRIPTOR_CONTENT" ]; then
@@ -405,20 +399,15 @@ spec:
             echo "ComponentRelease generated successfully"
 
             echo "===== Step 3: Generating ReleaseBinding ====="
-            echo "Binding name: $BINDING_NAME"
             echo "Component: $COMPONENT_NAME"
             echo "Component release: $RELEASE_NAME"
-            echo "Target environment: $TARGET_ENV"
             echo "Project: $PROJECT_NAME"
-            echo "Use pipeline: $USE_PIPELINE"
 
             occ releasebinding generate \
               --mode file-system --root-dir /mnt/vol/gitops \
               --component "$COMPONENT_NAME" \
               --component-release "$RELEASE_NAME" \
-              --target-env "$TARGET_ENV" \
-              --project "$PROJECT_NAME" \
-              --use-pipeline "$USE_PIPELINE"
+              --project "$PROJECT_NAME"
 
             echo "ReleaseBinding generated successfully"
             echo "===== All GitOps resources generated successfully ====="

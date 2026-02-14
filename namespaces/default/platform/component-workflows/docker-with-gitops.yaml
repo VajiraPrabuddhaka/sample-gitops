@@ -30,11 +30,6 @@ spec:
       docker:
         context: string | default=. description="Docker build context path relative to the repository root"
         filePath: string | default=./Dockerfile description="Path to the Dockerfile relative to the repository root"
-      gitops:
-        repositoryUrl: string | description="GitOps repository URL"
-        branch: string | default=main description="GitOps repository branch"
-        targetEnvironment: string | default=development description="Target environment name for deployment"
-        deploymentPipeline: string | description="Deployment pipeline name for the target environment"
       workloadDescriptorPath: string | default=workload.yaml description="Path to workload descriptor file relative to appPath"
 
   # Rendered workflow resource for ComponentWorkflowRun executions
@@ -67,15 +62,11 @@ spec:
             value: ${parameters.docker.context}
           - name: dockerfile-path
             value: ${parameters.docker.filePath}
-          # GitOps parameters
+          # PE-controlled hardcoded parameters
           - name: gitops-repo-url
-            value: ${parameters.gitops.repositoryUrl}
+            value: https://github.com/openchoreo/sample-gitops # Replace with your gitops repository URL
           - name: gitops-branch
-            value: ${parameters.gitops.branch}
-          - name: gitops-target-environment
-            value: ${parameters.gitops.targetEnvironment}
-          - name: gitops-deployment-pipeline
-            value: ${parameters.gitops.deploymentPipeline}
+            value: main
           # GitOps git secret (for private repos and PR creation)
           - name: gitops-git-secret
             value: ${metadata.workflowRunName}-gitops-git-secret
