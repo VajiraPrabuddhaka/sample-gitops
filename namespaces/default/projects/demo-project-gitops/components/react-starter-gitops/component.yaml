@@ -12,24 +12,15 @@ spec:
     name: deployment/web-application
     kind: ComponentType
 
-  # Component Workflow configuration (developer-provided)
   workflow:
-    # Reference to ComponentWorkflow
     name: react
-
-    # Required parameters required by the ComponentWorkflow
-    systemParameters:
+    parameters:
+      nodeVersion: "20"
       repository:
         url: "https://github.com/openchoreo/sample-workloads"
         revision:
           branch: "main"
-          # Optional commit hash, should be a valid git commit
-          # commit: ""
         appPath: "/webapp-react-nginx"
-
-    # Developer-configurable parameters (defined by PE, passed to build plane resource)
-    parameters:
-      nodeVersion: "20"
 
   parameters:
     replicas: 2

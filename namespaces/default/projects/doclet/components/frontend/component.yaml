@@ -14,13 +14,12 @@ spec:
 
   workflow:
     name: docker-gitops-release
-    systemParameters:
+    parameters:
       repository:
         url: "https://github.com/openchoreo/sample-workloads.git"
         revision:
           branch: "main"
         appPath: "/project-doclet-app/webapp-react-frontend"
-    parameters:
       docker:
         context: "/project-doclet-app/webapp-react-frontend"
         filePath: "/project-doclet-app/webapp-react-frontend/Dockerfile"
