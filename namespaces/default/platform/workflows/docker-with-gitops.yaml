@@ -1,5 +1,5 @@
 apiVersion: openchoreo.dev/v1alpha1
-kind: ComponentWorkflow
+kind: Workflow
 metadata:
   name: docker-gitops-release
   namespace: default
@@ -7,26 +7,22 @@ metadata:
     openchoreo.dev/description: "Docker workflow that builds a container image and performs GitOps release in a single workflow"
 spec:
   # Template Variable Reference (processed by controller):
-  # ${metadata.workflowRunName}  - ComponentWorkflowRun CR name
+  # ${metadata.workflowRunName}  - WorkflowRun CR name
   # ${metadata.componentName}    - Component name (Only accessible for component level component-workflows)
   # ${metadata.projectName}      - Project name (Only accessible for component level component-workflows)
   # ${metadata.namespaceName}    - Namespace name
-  # ${systemParameters.*}        - System-provided values from systemParameters schema
   # ${parameters.*}              - Developer-provided values from parameters schema
 
   # Schema definition for component workflows
   schema:
-    # System parameters - Required structured parameters for component workflows
-    systemParameters:
+    # Developer-configurable parameters
+    parameters:
       repository:
         url: string | description="Git repository URL"
         revision:
           branch: string | default=main description="Git branch to checkout"
           commit: string | description="Git commit SHA or reference (optional, defaults to latest)"
         appPath: string | default=. description="Path to the application directory within the repository"
-
-    # Developer-configurable parameters
-    parameters:
       docker:
         context: string | default=. description="Docker build context path relative to the repository root"
         filePath: string | default=./Dockerfile description="Path to the Dockerfile relative to the repository root"
@@ -50,13 +46,13 @@ spec:
             value: ${metadata.namespaceName}
           # Source repository parameters
           - name: git-repo
-            value: ${systemParameters.repository.url}
+            value: ${parameters.repository.url}
           - name: branch
-            value: ${systemParameters.repository.revision.branch}
+            value: ${parameters.repository.revision.branch}
           - name: commit
-            value: ${systemParameters.repository.revision.commit}
+            value: ${parameters.repository.revision.commit}
           - name: app-path
-            value: ${systemParameters.repository.appPath}
+            value: ${parameters.repository.appPath}
           # Docker parameters
           - name: docker-context
             value: ${parameters.docker.context}

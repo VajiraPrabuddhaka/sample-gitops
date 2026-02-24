@@ -15,13 +15,12 @@ spec:
 
   workflow:
     name: docker-gitops-release
-    systemParameters:
+    parameters:
       repository:
         url: "https://github.com/openchoreo/sample-workloads.git"
         revision:
           branch: "main"
         appPath: "/project-doclet-app/service-go-collab"
-    parameters:
       docker:
         context: "/project-doclet-app/service-go-collab"
         filePath: "/project-doclet-app/service-go-collab/Dockerfile"
