@@ -7,7 +7,8 @@ spec:
   workloadType: deployment
 
   allowedWorkflows:
-    - docker-gitops-release
+    - kind: Workflow
+      name: docker-gitops-release
 
   allowedTraits:
     - name: api-configuration
@@ -65,6 +66,7 @@ spec:
                     limits:
                       cpu: ${envOverrides.resources.limits.cpu}
                       memory: ${envOverrides.resources.limits.memory}
+                  env: ${connections.toContainerEnv()}
                   envFrom: ${configurations.toContainerEnvFrom()}
                   volumeMounts: ${configurations.toContainerVolumeMounts()}
               volumes: ${configurations.toVolumes()}
