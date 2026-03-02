@@ -216,3 +216,7 @@ spec:
       - key: POSTGRES_DB
         value: doclet
       image: postgres:16-alpine
+    endpoints:
+      tcp:
+        type: TCP
+        port: 5432
