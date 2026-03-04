@@ -4,19 +4,19 @@ metadata:
   name: frontend-workload
   namespace: default
 spec:
-  container:
-    image: host.k3d.internal:10082/doclet-frontend-image:v1-4a2acc61
   connections:
-    - component: document-svc
-      endpoint: http
-      visibility: project
-      envBindings:
-        address: DOC_SERVICE_URL
-    - component: collab-svc
-      endpoint: http
-      visibility: project
-      envBindings:
-        address: COLLAB_SERVICE_URL
+  - component: document-svc
+    endpoint: http
+    envBindings:
+      address: DOC_SERVICE_URL
+    visibility: project
+  - component: collab-svc
+    endpoint: http
+    envBindings:
+      address: COLLAB_SERVICE_URL
+    visibility: project
+  container:
+    image: host.k3d.internal:10082/doclet-frontend-image:v1-ba0e100a
   owner:
     componentName: frontend
     projectName: doclet
