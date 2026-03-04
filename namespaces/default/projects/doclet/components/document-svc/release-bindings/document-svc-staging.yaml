@@ -1,0 +1,11 @@
+apiVersion: openchoreo.dev/v1alpha1
+kind: ReleaseBinding
+metadata:
+  name: document-svc-staging
+  namespace: default
+spec:
+  environment: staging
+  owner:
+    componentName: document-svc
+    projectName: doclet
+  releaseName: document-svc-ba0e100a
