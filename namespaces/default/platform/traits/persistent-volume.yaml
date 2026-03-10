@@ -4,15 +4,31 @@ metadata:
   name: persistent-volume
   namespace: default
 spec:
-  schema:
-    parameters:
-      volumeName: "string"
-      mountPath: "string"
-      containerName: "string | default=main"
+  parameters:
+    openAPIV3Schema:
+      type: object
+      required:
+        - volumeName
+        - mountPath
+      properties:
+        volumeName:
+          type: string
+        mountPath:
+          type: string
+        containerName:
+          type: string
+          default: main
 
-    envOverrides:
-      size: "string | default=1Gi"
-      storageClass: "string | default=local-path"
+  environmentConfigs:
+    openAPIV3Schema:
+      type: object
+      properties:
+        size:
+          type: string
+          default: "1Gi"
+        storageClass:
+          type: string
+          default: local-path
 
   creates:
     - template:
@@ -26,8 +42,8 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: ${envOverrides.size}
-          storageClassName: ${envOverrides.storageClass}
+              storage: ${environmentConfigs.size}
+          storageClassName: ${environmentConfigs.storageClass}
 
   patches:
     - target:

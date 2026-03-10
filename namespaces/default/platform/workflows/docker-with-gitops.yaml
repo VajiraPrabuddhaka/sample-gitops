@@ -12,21 +12,59 @@ spec:
   # ${parameters.*}              - Developer-provided values from parameters schema
 
   # Schema definition for component workflows
-  schema:
-    # Developer-configurable parameters
-    parameters:
-      componentName: string | description="Component name"
-      projectName: string | description="Project name"
-      repository:
-        url: string | description="Git repository URL"
-        revision:
-          branch: string | default=main description="Git branch to checkout"
-          commit: string | description="Git commit SHA or reference (optional, defaults to latest)"
-        appPath: string | default=. description="Path to the application directory within the repository"
-      docker:
-        context: string | default=. description="Docker build context path relative to the repository root"
-        filePath: string | default=./Dockerfile description="Path to the Dockerfile relative to the repository root"
-      workloadDescriptorPath: string | default=workload.yaml description="Path to workload descriptor file relative to appPath"
+  parameters:
+    openAPIV3Schema:
+      type: object
+      required:
+        - componentName
+        - projectName
+        - repository
+      properties:
+        componentName:
+          type: string
+          description: "Component name"
+        projectName:
+          type: string
+          description: "Project name"
+        repository:
+          type: object
+          required:
+            - url
+          properties:
+            url:
+              type: string
+              description: "Git repository URL"
+            revision:
+              type: object
+              required:
+                - commit
+              properties:
+                branch:
+                  type: string
+                  default: main
+                  description: "Git branch to checkout"
+                commit:
+                  type: string
+                  description: "Git commit SHA or reference (optional, defaults to latest)"
+            appPath:
+              type: string
+              default: "."
+              description: "Path to the application directory within the repository"
+        docker:
+          type: object
+          properties:
+            context:
+              type: string
+              default: "."
+              description: "Docker build context path relative to the repository root"
+            filePath:
+              type: string
+              default: ./Dockerfile
+              description: "Path to the Dockerfile relative to the repository root"
+        workloadDescriptorPath:
+          type: string
+          default: workload.yaml
+          description: "Path to workload descriptor file relative to appPath"
 
   # Rendered workflow resource for WorkflowRun executions
   runTemplate:

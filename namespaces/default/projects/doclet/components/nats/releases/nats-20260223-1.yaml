@@ -19,7 +19,7 @@ spec:
           name: ${metadata.name}
           namespace: ${metadata.namespace}
         spec:
-          replicas: ${envOverrides.replicas}
+          replicas: ${environmentConfigs.replicas}
           selector:
             matchLabels: ${metadata.podSelectors}
           template:
@@ -34,7 +34,7 @@ spec:
                 env: ${connections.toContainerEnv()}
                 envFrom: ${configurations.toContainerEnvFrom()}
                 image: ${workload.container.image}
-                imagePullPolicy: ${envOverrides.imagePullPolicy}
+                imagePullPolicy: ${environmentConfigs.imagePullPolicy}
                 name: main
                 ports:
                 - containerPort: ${parameters.port}
@@ -42,11 +42,11 @@ spec:
                   protocol: TCP
                 resources:
                   limits:
-                    cpu: ${envOverrides.resources.limits.cpu}
-                    memory: ${envOverrides.resources.limits.memory}
+                    cpu: ${environmentConfigs.resources.limits.cpu}
+                    memory: ${environmentConfigs.resources.limits.memory}
                   requests:
-                    cpu: ${envOverrides.resources.requests.cpu}
-                    memory: ${envOverrides.resources.requests.memory}
+                    cpu: ${environmentConfigs.resources.requests.cpu}
+                    memory: ${environmentConfigs.resources.requests.memory}
                 volumeMounts: ${configurations.toContainerVolumeMounts()}
               volumes: ${configurations.toVolumes()}
     - id: service
@@ -136,20 +136,45 @@ spec:
             creationPolicy: Owner
             name: ${file.resourceName}
       var: file
-    schema:
-      envOverrides:
-        imagePullPolicy: string | default=IfNotPresent
-        replicas: integer | default=1
-        resources: ResourceRequirements | default={}
-      parameters:
-        port: integer | default=4222
-      types:
-        ResourceQuantity:
-          cpu: string | default=100m
-          memory: string | default=256Mi
-        ResourceRequirements:
-          limits: ResourceQuantity | default={}
-          requests: ResourceQuantity | default={}
+    parameters:
+      openAPIV3Schema:
+        type: object
+        properties:
+          port:
+            type: integer
+            default: 4222
+    environmentConfigs:
+      openAPIV3Schema:
+        type: object
+        $defs:
+          ResourceQuantity:
+            type: object
+            properties:
+              cpu:
+                type: string
+                default: "100m"
+              memory:
+                type: string
+                default: "256Mi"
+          ResourceRequirements:
+            type: object
+            properties:
+              requests:
+                $ref: "#/$defs/ResourceQuantity"
+                default: {}
+              limits:
+                $ref: "#/$defs/ResourceQuantity"
+                default: {}
+        properties:
+          replicas:
+            type: integer
+            default: 1
+          resources:
+            $ref: "#/$defs/ResourceRequirements"
+            default: {}
+          imagePullPolicy:
+            type: string
+            default: IfNotPresent
     workloadType: deployment
   owner:
     componentName: nats
