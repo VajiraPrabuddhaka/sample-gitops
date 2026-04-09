@@ -115,6 +115,6 @@ Choose a CD tool to get started with a complete end-to-end tutorial:
 | CD Tool     | Tutorial                                | Status    |
 |-------------|-----------------------------------------|-----------|
 | **Flux CD** | [GitOps with Flux CD](./flux/README.md) | Available |
-| **Argo CD** | Coming soon                             | Planned   |
+| **Argo CD** | [GitOps with Argo CD](./argo/README.md) | Available |
 
 Each tutorial walks you through forking this repository, configuring the CD tool, building and deploying the sample Doclet application, and promoting components across environments.
